@@ -20,6 +20,13 @@ app.get('/', function(req, res){
     res.render("index.ejs", { tasks });
 });
 
+app.get('/task/:filename', function(req, res){
+    const filename = req.params.filename;
+    const content = fs.readFileSync(path.join(filesDir, filename), "utf-8");
+    const [title, ...detailLines] = content.split("\n");
+    res.render("task.ejs", { title, details: detailLines.join("\n") });
+});
+
 app.post('/create', function(req, res){
     const { title, details } = req.body;
     const filename = title.split(" ").join("_") + ".txt";
